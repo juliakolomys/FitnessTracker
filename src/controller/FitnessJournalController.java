@@ -69,22 +69,21 @@ public class FitnessJournalController {
     }
 
     private void deleteWorkout() {
-        if (workoutJournal.getAllWorkouts().isEmpty()) {
-            consoleView.displayMessage("There are no trainings to delete");
+        List<Workout> allWorkouts = workoutJournal.getAllWorkouts();
+        int numberOfWorkouts = consoleView.displayWorkouts(allWorkouts);
+        if (numberOfWorkouts == 0) {
             return;
         }
-
         int criteriaChoice = consoleView.getDeleteCriteriaChoice();
-
         boolean deleted = false;
-        String criteriaType = "";
+        String criteriaInfo = "";
 
         switch (criteriaChoice) {
-            case 1: // За індексом
-                int index = consoleView.getWorkoutIndexToDelete();
+            case 1:
+                int index = consoleView.getWorkoutIndexToDelete(numberOfWorkouts);
                 if (workoutJournal.deleteWorkout(index)) {
                     deleted = true;
-                    criteriaType = "delete by index";
+                    criteriaInfo = "By index" + (index + 1);
                 }
                 break;
             case 2: // За датою
@@ -92,7 +91,7 @@ public class FitnessJournalController {
                 int deletedCountDate = workoutJournal.deleteWorkoutsByDate(date);
                 if (deletedCountDate > 0) {
                     deleted = true;
-                    criteriaType = "by date(" + date + ")";
+                    criteriaInfo = "By date (" + date + "), deleted workouts: " + deletedCountDate;
                 }
                 break;
             case 3: // За типом
@@ -100,17 +99,18 @@ public class FitnessJournalController {
                 int deletedCountType = workoutJournal.deleteWorkoutsByType(type);
                 if (deletedCountType > 0) {
                     deleted = true;
-                    criteriaType = "by type (" + type.getDisplayName() + ")";
+                    criteriaInfo = "By type (" + type.getDisplayName() + "), deleted workouts: " + deletedCountType;
                 }
                 break;
         }
 
         if (deleted) {
-            consoleView.displayMessage("Workout successfully deleted " + criteriaType);
+            consoleView.displayMessage("Workout successfully deleted " + criteriaInfo + ".");
         } else {
             consoleView.displayMessage("Failed to delete workout. Please check your input");
         }
     }
+
 
     private void calculateWeeklyCalories() {
         LocalDate startDateOfWeek = consoleView.getStartDateOfWeek();
