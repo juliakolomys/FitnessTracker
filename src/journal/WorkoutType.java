@@ -35,3 +35,4 @@ public enum WorkoutType {
         throw new IllegalArgumentException("Unknown workout type: " + text);
     }
 }
+
