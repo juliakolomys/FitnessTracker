@@ -49,7 +49,7 @@ public class ConsoleView {
         WorkoutType type = null;
         LocalDate date = null;
         int durationMinutes = -1;
-        int caloriesBurned = -1;
+        int caloriesBurned = 1;
         String typeStr;
         String dateStr;
 
@@ -121,17 +121,19 @@ public class ConsoleView {
         return new Workout(type, date, durationMinutes, caloriesBurned);
     }
 
-
-    public void displayWorkouts(List<Workout> workouts) {
+    public int displayWorkouts(List<Workout> workouts) {
         System.out.println("\n----- Your workouts -----");
         if (workouts.isEmpty()) {
             System.out.println("You have no added workouts");
+            return 0;
         } else {
             for (int i = 0; i < workouts.size(); i++) {
-                System.out.printf("%d. %s%n", i + 1, workouts.get(i).toString());
+                System.out.printf("%d. %s%n", i + 1, workouts.get(i).toString()); // Нумерація з 1 для користувача
             }
+            return workouts.size();
         }
     }
+
 
     public int getDeleteCriteriaChoice() {
         System.out.println("\n--- Delete workout ---");
@@ -155,15 +157,19 @@ public class ConsoleView {
         }
     }
 
-    public int getWorkoutIndexToDelete() {
-        System.out.print("Enter index of training to delete: ");
+    public int getWorkoutIndexToDelete(int maxIndex) {
+        System.out.print("Enter the number of the training to delete: ");
         while (true) {
             try {
                 int index = scanner.nextInt();
                 scanner.nextLine();
-                return index - 1;
+                if (index > 0 && index < maxIndex + 1) {
+                    return index - 1;
+                } else {
+                    System.out.println("Invalid number. Please enter a number between 1 and " + maxIndex + ".");
+                }
             } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please enter a whole number");
+                System.out.println("Invalid input. Please enter a whole number");
                 scanner.nextLine();
             }
         }
