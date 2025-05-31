@@ -102,17 +102,19 @@ public class ConsoleView {
         }
 
         // кількість спалених калорій
-        while (caloriesBurned < 1) {
-            System.out.print("Enter the number of burned calories: ");
-            try {
-                caloriesBurned = scanner.nextInt();
-                if (caloriesBurned < 1) {
-                    System.out.println("The number of calories must be a positive number bigger than 0");
+        if (type == WorkoutType.OTHER_TYPE) {
+            while (caloriesBurned < 1) {
+                System.out.print("Since it's an 'Other' option, please enter the number of burned calories in a minute: ");
+                try {
+                    caloriesBurned = scanner.nextInt();
+                    if (caloriesBurned < 1) {
+                        System.out.println("The number of calories must be a positive number bigger than 0");
+                    }
+                } catch (InputMismatchException e) {
+                    System.out.println("Invalid input. Please enter a whole number");
+                } finally {
+                    scanner.nextLine();
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input. Please enter a whole number");
-            } finally {
-                scanner.nextLine();
             }
         }
 
